@@ -55,6 +55,25 @@ export const getProductById = (id) => {
     })
 }
 
+export const getPriceById = (id) => {
+    return new Promise((resolve, reject) => {
+        connection.query(
+            'SELECT price FROM producten WHERE productId = ?',
+            [id],
+            (err, results) => {
+                if (err) {
+                    reject(err)
+                } else if (results.length > 0) {
+                    resolve(results[0])
+                }
+                else {
+                    resolve(null)
+                }
+            }
+        )         
+    })
+}
+
 export const getAllProducts = () => {
     return new Promise((resolve, reject) => {
         connection.query(

@@ -1,3 +1,31 @@
-<div class="container mb-3 bg-light">
-    <p>this is a footer</p>
-</div>
+<footer class="fixed-container mx-auto fixed-bottom">
+    <div class="position-relative">
+        <nav class="row g-0 m-3 my-md-5">
+            <div class="col-5 text-center">
+                <h4 class="card-title mb-4">Total order</h4>
+                <sect class="card-body d-flex flex-column p-0">
+                    <div class="text-body-secondary mb-4 position-relative">
+                        <i class="fa-solid fa-cart-shopping fa-2x"></i>
+                        <div class="position-absolute translate-middle bg-danger badge rounded-circle"><%= cart.amount %></div>
+                    </div>
+                    <small class="text-body-secondary">Total sweets</small>
+                </sect>
+            </div>
+            <div class="col-4 col-md-5 text-center">
+                <p class="card-text d-flex flex-column h-100 justify-content-end">
+                    <strong class="text-body-secondary flex-fill align-content-center mt-21">&euro;<%= cart.total %></strong>
+                    <small class="text-body-secondary">Total price</small>
+                </p>
+            </div>
+            <div class="col-3 col-md-2">
+                <a href="/cart" class="btn text-wrap m-0 p-0 h-100 badge bg-warning text-black d-flex flex-column text-center justify-content-center"
+                style="--bs-badge-font-size: 1.125rem">
+                    <h5 >ORDER</h5>
+                </a>
+            </div>            
+        </nav>
+
+        <div class="trapezoid position-absolute"></div>
+    </div>
+    
+</footer>

@@ -1,0 +1,37 @@
+<ul class="nav-navbar list-unstyled">
+    <li class="nav-item">
+        <h5 class="text-center py-3">MAKE A NEW ACCOUNT</h5>
+        <form action="register/account" method="post" class="card border-tertiary mx-5 my-2 p-5">
+
+            <label for="email"><h6>Email</h6></label><br>
+            <input type="email" name="email" id="email" placeholder="email@example.com" 
+            class="border border-warning-subtle mx-5" required><br>
+
+            <label for="password"><h6>Password</h6></label><br>
+            <input type="password" name="password" id="password" 
+            pattern="^(?=(.*\d))(?=(.*[a-z]))(?=(.*[A-Z]))(?=(.*[\W_]))(?!.*(.).*\1)[A-Za-z\d\W_]{12,}$"
+            class="border border-warning-subtle mx-5" required><br>
+
+            <label for="confirmPassword"><h6>Confirm password</h6></label><br>
+            <input type="password" name="confirmPassword" id="confirmPassword"
+            class="border border-warning-subtle mx-5" required><br>
+            <small class="mx-5">
+                At least:
+                <ul>
+                    <li>one digit</li>
+                    <li>one lowercase letter</li>
+                    <li>one uppercase letter</li>
+                    <li>one special character</li>
+                    <li>each character is unique</li>
+                    <li>a minimum length of 12 characters</li>
+                </ul>
+            </small>
+
+            <button type="submit" class="btn btn-warning mx-5">REGISTER</button>
+        </form>
+    </li>
+    <li class="nav-item card border-dark m-5 mt-0 p-5">
+        <h5 class="text-center border-top py-4">Do you have an account?</h5>
+        <a href="./" class="btn border border-warning bg-warning-subtle mx-5">Login</a>
+    </li>
+</ul>

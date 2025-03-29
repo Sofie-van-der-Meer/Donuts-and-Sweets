@@ -1,24 +1,13 @@
-
-<div class="form-group">
-    <label for="name">Productname</label>
-    <input required value="<%= product.name %>" type="text" name="name" id="name" class="form-control">
+<div class="form-group my-3">
+    <% if (product.imageUrl) { %>
+        <img src="<%= product.imageUrl %>" alt="" id="imagePreview" class="w-50 m-2">
+    <% }  else { %>
+        <label for="imageUrl">Import an image</label>
+        <input required type="file" name="imageUrl" id="imageUrl" class="form-control" accept="image/png, image/jpg">
+    <% } %>
 </div>
 
-<div class="form-group">
-    <label for="description">Description</label>
-    <textarea required type="text" name="description" id="description" class="form-control"><%= product.description %></textarea>
-</div>
-<div class="form-group">
-    <label for="price">Price</label>
-    <input required value="<%= product.price %>" type="number" name="price" id="price" class="form-control" step="0.01" min="0">
-</div>
-
-<div class="form-group">
-    <label for="stock">Stock</label>
-    <input required value="<%= product.stock %>" type="number" name="stock" id="stock" class="form-control" min="0">
-</div>
-
-<div class="form-group">
+<div class="form-group mb-3">
     <label for="categoryId">Select a catagory</label>
     <select name="categoryId" id="categoryId">
         <option value="">-- choose an category --</option>
@@ -33,14 +22,24 @@
 </div>
 
 <div class="form-group">
-    
-    <% if (product.imageUrl) { %>
-        <img src="<%= product.imageUrl %>" alt="" id="imagePreview" class="w-50 m-2">
-    <% }  else { %>
-        <label for="imageUrl">Import an image</label>
-        <input required type="file" name="imageUrl" id="imageUrl" class="form-control" accept="image/png, image/jpg">
-    <% } %>
+    <label for="name">Productname</label>
+    <input required value="<%= product.name %>" type="text" name="name" id="name" class="form-control">
 </div>
+
+<div class="form-group">
+    <label for="description">Description</label>
+    <textarea required type="text" name="description" id="description" class="form-control"><%= product.description %></textarea>
+</div>
+<div class="form-group">
+    <label for="price">Price</label>
+    <input required value="<%= product.price %>" type="number" name="price" id="price" class="form-control" step="0.01" min="-5">
+</div>
+
+<div class="form-group">
+    <label for="stock">Stock</label>
+    <input required value="<%= product.stock %>" type="number" name="stock" id="stock" class="form-control" min="0">
+</div>
+
 
 
 <a href="/" class="btn btn-secondary">Cancel</a>

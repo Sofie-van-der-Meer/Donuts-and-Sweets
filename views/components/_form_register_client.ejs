@@ -1,0 +1,43 @@
+<ul class="nav-navbar list-unstyled">
+    <li class="nav-item">
+        <h5 class="text-center py-3">MAKE A NEW ACCOUNT</h5>
+        <form action="client" method="post" class="card border-tertiary mx-5 my-2 p-5">
+            <label for="firstName"><h6>First name</h6></label><br>
+            <input type="text" name="firstName" id="firstName" placeholder="Jane" minlength="3" maxlength="50" 
+            class="border border-warning-subtle mx-5" required><br>
+            
+            <label for="lastName"><h6>Last name</h6></label><br>
+            <input type="text" name="lastName" id="lastName" placeholder="Doe" minlength="3" maxlength="50" 
+            class="border border-warning-subtle mx-5" required><br>
+            
+            <label for="phoneNr"><h6>Phonenumber</h6></label><br>
+            <div class="input-group mx-5">
+                <span class="input-group-text border border-warning-subtle">+32</span>
+                <input type="tel" name="phoneNr" id="phoneNr" placeholder="123456789" pattern="^[0-9]{8,9}$"
+                class="border border-warning-subtle" required>
+            </div><br>
+
+            <label for="street"><h6>Street</h6></label><br>
+            <input type="text" name="street" id="street" placeholder="street" minlength="3" maxlength="50" 
+            class="border border-warning-subtle mx-5" pattern="^[a-zA-Z0-9\s,.'-]+$" required><br>
+            
+            <label for="houseNr"><h6>Housenumber</h6></label><br>
+            <input type="number" name="houseNr" id="houseNr" placeholder="4" min="1" max="99999"
+            class="border border-warning-subtle mx-5" required><br>
+
+            <label for="bus"><h6>Bus</h6></label><br>
+            <input type="text" name="bus" id="bus" placeholder="1" maxlength="5" pattern="^[a-zA-Z0-9]+$"
+            class="border border-warning-subtle mx-5"><br>
+            
+            <label for="zipCode"><h6>Zipcode</h6></label><br>
+            <input type="text" name="zipCode" id="zipCode" placeholder="1000" minlength="4" maxlength="4" pattern="^\d{4}$" 
+            class="border border-warning-subtle mx-5" required><br>
+
+            <label for="placeName"><h6>city</h6></label><br>
+            <input type="text" name="placeName" id="placeName" placeholder="city" minlength="3" maxlength="50" 
+            class="border border-warning-subtle mx-5" pattern="^[a-zA-Z\-]+$"  required><br>
+
+            <button type="submit" class="btn btn-warning mx-5">Complete registration</button>
+        </form>
+    </li>
+</ul>

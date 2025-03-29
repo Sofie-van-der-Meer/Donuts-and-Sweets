@@ -1,6 +1,7 @@
 import express from 'express';
-import { createProduct, getProductById, updateProduct } from '../models/product.js';
+import { createProduct, getPriceById, getProductById, updateProduct } from '../models/product.js';
 import { getAllCategories, getCategoryById } from '../models/category.js';
+import { updateSessionCart, incrementCart, decrementCart } from './_functions.js';
 import { upload } from '../models/image.js';
 
 const router = express.Router();
@@ -14,8 +15,21 @@ let product = {
     categoryId: ''
 }
 let categories = {}
+let cart = {
+    amount: 0,
+    total: 0,
+    products: {}
+}
 
 router.get('/new', async (req, res) => {
+    product = {
+        name: '',
+        description: '',
+        price: '',
+        stock: '', 
+        imageUrl: '', 
+        categoryId: ''
+    }
     categories = await getAllCategories()
     res.render('products/new', { product: product, categories: categories })
 })
@@ -35,12 +49,24 @@ router.get('/:id', async (req, res) => {
     try {
         product = await getProductById(req.params.id)
         const category = await getCategoryById(product.categoryId)
-        res.render('products/show', { product: product, category: category })
+        if (req.session.cart) {
+            cart = req.session.cart
+        }
+        res.render('products/show', { product: product, category: category, cart: cart })
     }
     catch (e) {
         res.redirect('/'); 
         console.log('router.get /edit/:id: ', e)
     }
+})
+
+router.get('/:id/add', (req, res) => {
+    const redirectUrl = `/products/${req.params.id}`
+    updateSessionCart(req, res, incrementCart, redirectUrl)
+})
+router.get('/:id/reduce', (req, res) => {
+    const redirectUrl = `/products/${req.params.id}`
+    updateSessionCart(req, res, decrementCart, redirectUrl)
 })
 
 router.put('/:id', async (req, res) => {
