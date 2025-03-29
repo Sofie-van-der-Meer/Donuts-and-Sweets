@@ -20,10 +20,11 @@
             </section>
         </header>
         <main>   
-            <% if (loggedIn) { %>
-                your are loged in!!!
-           <% } else { %>
-            <%- include('../components/_form_login') %>
+            <% if (clientData) { %>
+                test test
+                <%- include('../components/_account_info') %>
+            <% } else { %>
+                <%- include('../components/_form_login') %>
             <% } %>
         </main>
 
@@ -32,7 +33,7 @@
         <nav class="navbar bg-body-tertiary rounded-top-5">
             <ul class="navbar-nav d-flex flex-row justify-content-evenly w-100 m-3">
                 <li class="nav-item">
-                    <a href="#top" class="nav-link">HOME</a>
+                    <a href="../index" class="nav-link">HOME</a>
                 </li>
                 <li class="nav-item">
                     <a href="/orders" class="nav-link">ORDERS</a>

@@ -36,3 +36,20 @@ export const getAccountByEmail = (email) => {
         )         
     })
 }
+
+export const getEmailById = (id) => {
+    return new Promise((resolve, reject) => {
+        connection.query(
+            'SELECT * FROM accounts WHERE accountId = ?',
+            [id],
+            (err, results) => {
+                if (err) {
+                    reject(err)
+                } 
+                else {
+                    resolve({ email: results.email })
+                }
+            }
+        )         
+    })
+}

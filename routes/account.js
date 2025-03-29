@@ -3,9 +3,8 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { check, validationResult } from 'express-validator'
 import { createAccount, getAccountByEmail } from '../models/account.js';
-import { createPlace, getPlaceByData } from '../models/place.js';
-import { createAdress } from '../models/adress.js';
-import { createClient } from '../models/client.js';
+import Validate from '../middleware/validate.js';
+import { Register } from '../controllers/auth.js';
 
 const router = express.Router();
 
@@ -24,27 +23,29 @@ const verifyToken = (req, res, next) => {
 }
 
 router.get('/', async (req, res) => {
-    res.render('account/index',{ loggedIn: false })
+    const clientData = req.session.client 
+    res.render('account/index', { clientData })
+    console.log(clientData)
 })
 router.get('/register', async (req, res) => {
     res.render('account/register', {url: 'account'})
 })
 
-router.post('/login', async (req, res) => {
+router.post('/register/login', async (req, res) => {
     try {
         const account = await getAccountByEmail(req.body.email)
         if (!account) {
-           return res.redirect('/account/register')
+           return res.redirect('/register')
         }
         console.log('found the email')
     } catch (error) {
         console.log('Internal server error: ', error)
-        res.render('account/index',{ loggedIn: false })
+        res.render('account/index', { clientData: req.session.client })
     }
     
 })
 
-router.post('/register/account', [
+router.post('/register/createAccount', [
     // email
     check('email')
         .isEmail()
@@ -87,51 +88,47 @@ router.post('/register/account', [
         }
 
         const newAccount = await createAccount(accountData)
-        console.log(newAccount)
+        console.log('newAccount: ', newAccount)
         req.session.accountId = newAccount.id
 
         res.render('account/register', {url: 'client'})
     } catch (error) {
         console.log('Internal server error: ', error)
-        res.render('account/index',{ loggedIn: false })
+        res.render('', { clientData: req.session.client })
     }
     
 })
 
-router.post('/register/client', [
-    // name
+router.post(
+    '/register/client', 
+    // verifyToken, 
+    [
     check('firstName')
         .isLength({ min: 3, max: 50 })
-        .withMessage('First name must be between 3 and 50 characters'),
+        .withMessage('First name must be between 3 and 50 characters')
+        .trim()
+        .escape(),
     check('lastName')
         .isLength({ min: 3, max: 50 })
-        .withMessage('Lastname must be between 3 and 50 characters'),
-    check('firstName').trim().escape(),
-    check('lastName').trim().escape(),
-    // number
+        .withMessage('Lastname must be between 3 and 50 characters')
+        .trim()
+        .escape(),
     check('phoneNr')
         .matches(/^[0-9]{8,9}$/)
         .withMessage('Phone number must be 8-9 digits long'),
-    // Street
     check('street')
         .isLength({ min: 3, max: 50 })
         .withMessage('Street must be between 3 and 50 characters.')
         .matches(/^[a-zA-Z0-9\s,.'-]+$/)
         .withMessage('Street can only contain letters, digits, spaces, commas, periods, apostrophes, and hyphens.'),
-
-    // House Number
     check('houseNr')
         .isInt({ min: 1, max: 99999 })
         .withMessage('House number must be a positive integer between 1 and 99999.'),
-
-    // Bus
     check('bus')
         .optional({ checkFalsy: true })
         .trim()
         .matches(/^[a-zA-Z0-9]+$/)
         .withMessage('Bus can only contain letters and numbers.'),
-
-    // Zip Code 
     check('zipCode')
         .isLength({ min: 4, max: 4 })
         .withMessage('Zip code must be exactly 4 digits.')
@@ -139,53 +136,14 @@ router.post('/register/client', [
         .withMessage('Zip code must be numeric.')
         .matches(/^\d{4}$/)
         .withMessage('Zip code must contain exactly 4 digits.'),
-
-    // Place Name
     check('placeName')
         .isLength({ min: 3, max: 50 })
         .withMessage('City name must be between 3 and 50 characters.')
         .matches(/^[a-zA-Z\-]+$/)
         .withMessage('City name can only contain letters and hyphens.')
-
-], async (req, res) => {
-    const errors = validationResult(req)
-
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() })
-    }
-    try {
-
-        const accountId = req.session.accountId
-        if (!accountId && !0) {
-            return res.status(400).send('Account not found. Please complete the first step of the registration', req.session.accountId)
-        }
-        const { firstName, lastName, phoneNr, street, houseNr, bus, zipCode, placeName } = req.body
-
-        const placeData = { zipCode, placeName }
-        console.log('placeData: ', placeData)
-        const existingPlace = await getPlaceByData(placeData)
-        console.log('existingPlace: ', existingPlace)
-        let place
-        if (existingPlace) {
-            place = existingPlace
-        } else {
-            place = await createPlace(placeData)
-        }
-        const placeId = place.id
-        console.log('place: ', place)
-        console.log('placeId: ', placeId)
-        const adressData = { street, houseNr, bus, placeId}
-        const adress = await createAdress(adressData)
-        const clientData = { firstName, lastName, phoneNr, adressId: adress.id, accountId }
-        const client = await createClient(clientData)
-
-        console.log('end client creation: ', client, adress, place)
-        res.render('account/index', { loggedIn: true, client, adress, place })
-    } catch (error) {
-        console.log('Internal server error: ', error)
-        res.render('account/index', { loggedIn: false })
-    }
-    
-})
+    ], 
+    Validate,
+    Register
+)
 
 export default router

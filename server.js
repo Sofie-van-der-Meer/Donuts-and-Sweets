@@ -2,11 +2,13 @@ import express from 'express';
 import 'dotenv/config'
 import methodOverride from 'method-override'
 import session from 'express-session'
+import path from 'path'
 import { getAllProducts, getAllProductsByCategoryId } from './models/product.js';
 import { getAllCategories } from './models/category.js';
 
 const app = express()
 
+app.set('views', path.join(process.cwd(), 'views'))
 app.set('view engine', 'ejs')
 
 app.use(express.urlencoded({ extended: true }))
