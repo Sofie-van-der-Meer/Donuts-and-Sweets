@@ -1,20 +1,24 @@
 <% if (clientData.account, clientData.client, clientData.adress, clientData.place) { %>
-    <%= clientData.client.firstName %>
-    <article class="badge">
-    <h4>Hello <%= clientData.client.firstName %></h4>
+    <article class="badge text-center w-100">
+        <h4>Hello <%= clientData.client.firstName %></h4>
         <p>Here you can find your personal data</p> 
     </article>
     <article class="card">
         <section class="card-body">
             <h3 class="card-title">This is you</h3>
             <p class="card-text"><%= clientData.client.firstName %> <%= clientData.client.lastName %></p>
-            <p class="card-text"><%= clientData.adress.street %> <%= clientData.adress.houseNr %> <%= clientData.adress.bus %></p>
+            <p class="card-text"><%= clientData.adress.street %> <%= clientData.adress.houseNr %>
+                <% if (clientData.adress.bus) { %> 
+                   / <%= clientData.adress.bus %>
+                <%} %>
+            </p>
             <p class="card-text"><%= clientData.place.zipCode %> <%= clientData.place.placeName %></p>
             <p class="card-text"><%= clientData.account.email %></p>        
         </section>
-        <section class="card-footer">
+        <section class="card-footer d-flex flex-nowrap justify-content-evenly">
             <a href="" class="card-link">Change personal data</a>
             <a href="" class="card-link">Change password</a>
+            <a href="account/logout" class="card-link">Logout</a>
         </section>
     </article>    
 <% } else { %>

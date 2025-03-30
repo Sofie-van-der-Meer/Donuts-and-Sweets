@@ -25,7 +25,6 @@
         </header>
         <main class="pb-180">
             <% if (products.length > 0) { %>
-                there is one or more products in the cart
                 <% products.forEach(({product, quantity}) => { if (quantity) { %>
                     <div class="card my-3 d-flex flex-row vh-15 border border-warning">
                         <!-- <div class="row g-0"> -->
@@ -55,8 +54,8 @@
                                 </section>                                
                             </div>
                     </div>
-                    <% } }) %>  
-                <% }  %>  
+                <% } }) %>  
+            <% } %>  
         </main>
         <%- include('../components/_footer') %>
 

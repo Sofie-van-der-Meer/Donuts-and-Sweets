@@ -1,56 +1,58 @@
 import express from 'express';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import { check, validationResult } from 'express-validator'
-import { createAccount, getAccountByEmail } from '../models/account.js';
+import { check } from 'express-validator'
+import { getAccountByEmail } from '../models/account.js';
 import Validate from '../middleware/validate.js';
-import { Register } from '../controllers/auth.js';
+import { Login, Register, RegisterAccount } from '../controllers/auth.js';
 
 const router = express.Router();
 
-const verifyToken = (req, res, next) => {
-    const token = req.headers['authorization']
-    if (!token) {
-        return res.status(401).json({ error: 'unauthorized'})
-    }
-    jwt.verify(token, 'secret', (err, decoded) => {
-        if (err) {
-            return res.status(401).json({ error: 'unauthorized'})
-        }
-        req.user = decoded
-        next()
-    })
-}
+// const verifyToken = (req, res, next) => {
+//     const token = req.headers['authorization']
+//     if (!token) {
+//         return res.status(401).json({ error: 'unauthorized'})
+//     }
+//     jwt.verify(token, 'secret', (err, decoded) => {
+//         if (err) {
+//             return res.status(401).json({ error: 'unauthorized'})
+//         }
+//         req.user = decoded
+//         next()
+//     })
+// }
 
-router.get('/', async (req, res) => {
-    const clientData = req.session.client 
+router.get('/', (req, res) => {
+    let clientData = null
+    if (req.session.client) {
+        clientData = req.session.client 
+    }
     res.render('account/index', { clientData })
-    console.log(clientData)
 })
-router.get('/register', async (req, res) => {
+
+router.get('/register', (req, res) => {
     res.render('account/register', {url: 'account'})
 })
 
-router.post('/register/login', async (req, res) => {
-    try {
-        const account = await getAccountByEmail(req.body.email)
-        if (!account) {
-           return res.redirect('/register')
-        }
-        console.log('found the email')
-    } catch (error) {
-        console.log('Internal server error: ', error)
-        res.render('account/index', { clientData: req.session.client })
-    }
-    
+router.get('/logout', (req, res) => {
+    req.session.destroy()
+    let clientData = null
+    res.render('account/index', { clientData })
 })
 
-router.post('/register/createAccount', [
-    // email
+router.post(
+    '/login',
+    check('email')
+        .isEmail()
+        .withMessage('Enter a valid email adress')
+        .normalizeEmail(),
+    check('password').not().isEmpty(),
+    Validate,
+    Login
+)
+
+router.post('/register/createAccount', 
     check('email')
         .isEmail()
         .withMessage('Please enter a valid email'),
-
     check('email')
         .custom(async (value) => {
             const existingAccount = await getAccountByEmail(value)
@@ -58,7 +60,6 @@ router.post('/register/createAccount', [
                return new Error('Email is already taken')
             }
         }),
-    // password
     check('confirmPassword')
         .custom((value, { req }) => {
         if (value !== req.body.password) {
@@ -71,38 +72,12 @@ router.post('/register/createAccount', [
         .withMessage(`Password must be at least 12 characters long, 
             and contain at least one digit, one lowercase letter, 
             one uppercase letter, and one special character.`),
-
-], async (req, res) => {
-    const errors = validationResult(req)
-
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() })
-    }
-    try {
-
-        const { email, password } = req.body
-        const hashedPassword = await bcrypt.hash(password, 10)
-        const accountData = {
-            email, 
-            password: hashedPassword
-        }
-
-        const newAccount = await createAccount(accountData)
-        console.log('newAccount: ', newAccount)
-        req.session.accountId = newAccount.id
-
-        res.render('account/register', {url: 'client'})
-    } catch (error) {
-        console.log('Internal server error: ', error)
-        res.render('', { clientData: req.session.client })
-    }
-    
-})
+    Validate,
+    RegisterAccount
+)
 
 router.post(
     '/register/client', 
-    // verifyToken, 
-    [
     check('firstName')
         .isLength({ min: 3, max: 50 })
         .withMessage('First name must be between 3 and 50 characters')
@@ -140,8 +115,7 @@ router.post(
         .isLength({ min: 3, max: 50 })
         .withMessage('City name must be between 3 and 50 characters.')
         .matches(/^[a-zA-Z\-]+$/)
-        .withMessage('City name can only contain letters and hyphens.')
-    ], 
+        .withMessage('City name can only contain letters and hyphens.'), 
     Validate,
     Register
 )
