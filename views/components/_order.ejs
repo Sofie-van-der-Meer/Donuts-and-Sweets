@@ -1,0 +1,13 @@
+<%= ordersData  %>
+
+<% ordersData.forEach(order => { %>
+    <article class="card">
+        <p class="card-text"><%= order.orderId %></p>
+        <p class="card-text"><%= order.clientId %></p>
+        <p class="card-text"><%= order.orderDate %></p>
+        <p class="card-text"><%= order.deliverTime %></p>
+        <p class="card-text"><%= order.deliverAdressId %></p>
+        <p class="card-text"><%= order.deliverCost %></p>
+        <p class="card-text"><%= order.payMethodId %></p>
+    </article>
+<% }) %>

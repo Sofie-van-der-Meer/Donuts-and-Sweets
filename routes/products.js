@@ -52,7 +52,11 @@ router.get('/:id', async (req, res) => {
         if (req.session.cart) {
             cart = req.session.cart
         }
-        res.render('products/show', { product: product, category: category, cart: cart })
+        const link = {
+            href: '/cart',
+            title: 'WATCH CART'
+        }
+        res.render('products/show', { product: product, category: category, cart: cart, link })
     }
     catch (e) {
         res.redirect('/'); 

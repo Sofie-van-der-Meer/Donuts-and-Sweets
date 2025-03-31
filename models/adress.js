@@ -36,3 +36,23 @@ export const getAdressById = (id) => {
         )         
     })
 }
+
+
+export const getAdressByData= ({street, houseNr, bus, placeId,}) => {
+    return new Promise((resolve, reject) => {
+        connection.query(
+            'SELECT * FROM adresses WHERE street = ? AND houseNr = ? AND bus = ? AND placeId = ?',
+            [street, houseNr, bus, placeId],
+            (err, results) => {
+                if (err) {
+                    reject(err)
+                } else if (results.length > 0) {
+                    resolve(results[0])
+                }
+                else {
+                    resolve(null)
+                }
+            }
+        )         
+    })
+}

@@ -41,10 +41,12 @@ app.get('/', async (req, res) => {
 import productRouter from './routes/products.js'
 import cartRouter from './routes/cart.js'
 import accountRouter from './routes/account.js'
+import orderRouter from './routes/order.js'
 
 app.use('/products', productRouter)
 app.use('/cart', cartRouter)
 app.use('/account', accountRouter)
+app.use('/order', orderRouter)
 
 // start server
 app.listen(process.env.DB_PORT) 

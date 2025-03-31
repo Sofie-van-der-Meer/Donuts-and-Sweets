@@ -12,8 +12,6 @@ export async function updateSessionCart(req, res, func, url) {
         }
     }
     func(req.session, productId, productPrice.price)
-
-    console.log('update cart: ', req.session.cart)
     res.redirect(url);
 }
 

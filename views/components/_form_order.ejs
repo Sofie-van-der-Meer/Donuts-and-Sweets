@@ -1,0 +1,82 @@
+
+
+
+<% if (clientData.account, clientData.client, clientData.adress, clientData.place) { %>
+
+    <form action="order/checkout" method="post" class="card border-tertiary mx-5 my-2 p-5">
+        <section class="card-body">
+            <h6>Personal info</h6>
+            <input type="text" name="clientId" id="clientId" value="<%= clientData.client.clientId %>" hidden>
+            <p class="card-text"><%= clientData.client.firstName %> <%= clientData.client.lastName %></p>
+            <p class="card-text">+32 <%= clientData.client.phoneNr %></p> 
+            <p class="card-text"><%= clientData.account.email %></p>        
+        </section>
+        <div class="form-group">
+            <h6>Deliver adress</h6>
+            <label for="street"><p>street</p></label>
+            <input type="text" name="street" id="street" value="<%= clientData.adress.street %>" 
+            class="border border-warning-subtle mx-5" required>
+            <label for="houseNr"><p>Housenumber</p></label>
+            <input type="number" name="houseNr" id="houseNr" value="<%= clientData.adress.houseNr %>" 
+            class="border border-warning-subtle mx-5" required> <br>
+            <label for="bus"><p>Bus</p></label>
+            <input type="text" name="bus" id="bus" value="<%= clientData.adress.bus %>" placeholder="bus"
+            class="border border-warning-subtle mx-5">
+            <label for="zipCode"><p>Zipcode</p></label>
+            <input type="number" name="zipCode" id="zipCode" value="<%= clientData.place.zipCode %>" 
+            class="border border-warning-subtle mx-5" required>
+            <label for="placeName"><p>Placename</p></label>
+            <input type="text" name="placeName" id="placeName" value="<%= clientData.place.placeName %>" 
+            class="border border-warning-subtle mx-5" required><br>
+        </div>
+
+        <div class="form-group">
+            <fieldset class="d-flex flex-column">
+                <legend>Select moment of delivering</legend>
+                    <input type="radio" name="deliverTime" id="0000" value="So fast as possible" 
+                    class="border border-warning-subtle mx-5">
+                    <label for="deliverTime_"><h6>So fast as possible</h6></label>
+
+                    <input type="radio" name="deliverTime" id="3600" value="3600" 
+                    class="border border-warning-subtle mx-5">
+                    <label for="deliverTime_"><h6>Over 1 hour</h6></label>
+
+                    <input type="radio" name="deliverTime" id="4500" value="4500" 
+                    class="border border-warning-subtle mx-5">
+                    <label for="deliverTime_"><h6>Over 1 hour and 15 min</h6></label>
+
+                    <input type="radio" name="deliverTime" id="5400" value="5400" 
+                    class="border border-warning-subtle mx-5">
+                    <label for="deliverTime_"><h6>Over 1 hour and 30 min</h6></label>
+
+            </fieldset>
+        </div>
+
+        <div class="form-group">
+            <fieldset class="d-flex flex-column">
+                <legend>Select a payment method</legend>
+                <% payMethodData.forEach(payMethod => { %>
+                    <input type="radio" name="payMethodId" id="<%= payMethod.payMethodId %>" value="<%= payMethod.payMethodId %>" 
+                    class="border border-warning-subtle mx-5">
+                    <label for="<%= payMethod.payMethodId %>"><h6><%= payMethod.name %></h6></label>
+                <% }) %>
+            </fieldset>
+        </div>
+        <div class="form-group">
+            <label for="deliverCost"><h6>Delivercost</h6></label><br>
+            <% if (cartData.total >= 50) { %>
+                <input type="number" name="deliverCost" id="deliverCost" value="0.00" 
+                class="" hidden>
+                <p>0.00 &euro;</p>
+            <% } else { %>
+                <input type="number" name="deliverCost" id="deliverCost" value="5.95" 
+                class="" hidden>
+                <p>5.95 &euro;</p>
+            <% } %>
+        </div>
+        <button type="submit" class="btn btn-warning mx-5">PAY</button>
+    </form>
+
+
+<% } %>
+

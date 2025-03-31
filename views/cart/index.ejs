@@ -37,7 +37,7 @@
                                     <p class="card-text"><%= product.description %></p>
                                     <p class="card-text text-end">
                                         <small class="text-body-secondary">&euro; <%= product.price %>/piece - </small>
-                                        <strong class="text-body-secondary">&euro; <%= product.price * quantity %></strong>
+                                        <strong class="text-body-secondary">&euro; <%= (product.price * quantity).toFixed(2) %></strong>
                                     </p>
                                 </div>
                                 <section class="col-2 col-md-1 m-2 m-md-3 p-3 bg-warning bg-opacity-50 badge
